@@ -89,4 +89,38 @@ imprimir_tablero:
 		Fin_linVert_2:
 jr $ra
 
+checar_jugada_valida:
+	# Checa si el número es >= 1
+	move $t0, $a0
+	bge $t0, 1, validez_1
+	
+	j jugada_invalida
+	
+
+	# Checa si el número es <= 9	
+validez_1:
+	ble $t0, 9, validez_2
+	j jugada_invalida
+	
+	
+validez_2:
+	# Checa si el campo ya fue llenado
+	subu $t1, $t0, 1
+	li $t2, 4 
+	mult $t1, $t2
+	mflo $t3
+	la $t4, tablero
+	add $t4, $t4, $t3
+	lw $t5, 0($t4) 
+		beq $t5, $0, jugada_valida 
+	
+	
+jugada_invalida:
+	li $v0, 0
+	jr $ra
+	
+	
+jugada_valida:
+	li $v0, 1
+	jr $ra
 
