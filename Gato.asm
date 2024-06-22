@@ -15,7 +15,7 @@ imprimir_tablero:
 	# Cargando el color del tablero (rojo)
 	li $t1, 0xFF0000
 	# Se especifica la direccion donde se desplegara la fila 1 desde bitmap
-	lui $t0, 0x1001
+	li $t0, 0x10010000
 	# Se setean los pixeles
 	li $t5, 1024
 	li $t6, 80
@@ -34,7 +34,7 @@ imprimir_tablero:
 	Fin_linHori_1:
 # Dibujando linea horizontal 2
 	# Se especifica la direccion donde se desplegara la fila 2 desde bitmap
-	lui $t0, 0x1001
+	li $t0, 0x10010000
 	# Se setean los pixeles
 	li $t5, 1024
 	li $t6, 150
@@ -53,7 +53,7 @@ imprimir_tablero:
 	Fin_linHori_2:
 # Dibujando linea vertical 1
 	# Se especifica la direccion donde se desplegara la columna 1 desde bitmap
-	lui $t0, 0x1001
+	li $t0, 0x10010000
 	# Seteo de pixeles
 	li $t6, 10
 	mult $t5, $t6
@@ -71,7 +71,7 @@ imprimir_tablero:
 	Fin_linVert_1:
 # Dibujando linea vertical 2
 	# Se especifica la direccion donde se desplegara la columna 2 desde bitmap
-	lui $t0, 0x1001
+	li $t0, 0x10010000
 	# Seteo de pixeles
 	li $t6, 10
 	mult $t5, $t6
