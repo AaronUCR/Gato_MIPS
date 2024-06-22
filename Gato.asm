@@ -203,3 +203,4 @@ jugada_valida:
 	li $v0, 1
 jr $ra
 
+# TO DO: Verificar empate y gane, dibujar en mips X y l
