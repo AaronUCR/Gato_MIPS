@@ -41,14 +41,16 @@ jugador_1:
 	jugada_validada1:
 	jal jugada_jugador1
 	
-	# Verifica si hubo empate
-	jal verificar_empate
-	beq $v0, 1, Fin
+	move $a2, $s2
+	jal interfaz_X
 	
 	# Verifica si el jugador 1 ha ganado
 	jal verificar_gane
 	beq $v0, 1, Fin
 	
+	# Verifica si hubo empate
+	jal verificar_empate
+	beq $v0, 1, Fin
 	
 # Llamada a las funciones correspondientes de jugador 2 (l)
 jugador_2:
@@ -73,11 +75,15 @@ jugador_2:
 	jugada_validada2:
 	jal jugada_jugador2
 	
-	# Verifica si hubo empate
-	jal verificar_empate
-	beq $v0, 1, Fin
+	move $a2, $s2
+	jal interfaz_l
+	
 	# Verifica si el jugador 2 ha ganado
 	jal verificar_gane
+	beq $v0, 1, Fin
+	
+	# Verifica si hubo empate
+	jal verificar_empate
 	beq $v0, 1, Fin
 	
 	j jugador_1
@@ -403,5 +409,231 @@ verificar_gane:
         li $v0, 0
         jr $ra
         
- #TO DO: Dibujar X y l en bitmap
-		
+# Funcion que diseña las X en el tablero
+interfaz_X:
+	# Carga el color y la direccion de bitmap
+	li $t1, 0xFFFFFF
+	li $t0, 0x10010000
+	ori $t2, $0, 0
+	
+	# Verifica en que celda se va a dibujar a X segun $a2
+	beq $a2, 1, x_1
+	beq $a2, 2, x_2
+	beq $a2, 3, x_3
+	beq $a2, 4, x_4
+	beq $a2, 5, x_5
+	beq $a2, 6, x_6
+	beq $a2, 7, x_7
+	beq $a2, 8, x_8
+	beq $a2, 9, x_9
+
+	#Se dibuja la X en la celda correspondiente
+	x_1:	
+		li $t3, 30
+		li $t4, 1024
+		mult $t3, $t4
+		mflo $t5
+		add $t0, $t0, $t5
+		addi $t0, $t0, 140
+		j diagonal_X1
+	
+	x_2:
+		li $t3, 30
+		li $t4, 1024
+		mult $t3, $t4
+		mflo $t5
+		add $t0, $t0, $t5
+		addi $t0, $t0, 440	
+		j diagonal_X1
+			
+	x_3:
+		li $t3, 30
+		li $t4, 1024
+		mult $t3, $t4
+		mflo $t5
+		add $t0, $t0, $t5
+		add $t0, $t0, 760
+		j diagonal_X1
+	
+	x_4:
+		li $t3, 100
+		li $t4, 1024
+		mult $t3, $t4
+		mflo $t5
+		add $t0, $t0, $t5
+		add $t0, $t0, 140	
+		j diagonal_X1
+	
+	x_5:
+		li $t3, 100
+		li $t4, 1024
+		mult $t3, $t4
+		mflo $t5
+		add $t0, $t0, $t5
+		add $t0, $t0, 440
+		j diagonal_X1
+	
+	x_6:
+		li $t3, 100
+		li $t4, 1024
+		mult $t3, $t4
+		mflo $t5
+		add $t0, $t0, $t5
+		add $t0, $t0, 760
+		j diagonal_X1
+	
+	x_7:
+		li $t3, 170
+		li $t4, 1024
+		mult $t3, $t4
+		mflo $t5
+		add $t0, $t0, $t5
+		addi $t0, $t0, 140
+		j diagonal_X1
+	
+	x_8:
+		li $t3, 170
+		li $t4, 1024
+		mult $t3, $t4
+		mflo $t5
+		add $t0, $t0, $t5
+		add $t0, $t0, 440
+		j diagonal_X1
+	
+	x_9:
+		li $t3, 170
+		li $t4, 1024
+		mult $t3, $t4
+		mflo $t5
+		add $t0, $t0, $t5
+		add $t0, $t0, 760
+		j diagonal_X1
+	
+	# Escala de dibujo de las X en la interfaz
+	diagonal_X1:
+		beq $t2, 30, Fin_diagX1
+			addi $t0, $t0, 1024
+			addi $t0, $t0, 4
+			sw $t1, 0($t0)
+			addi $t2, $t2, 1
+			j diagonal_X1
+		Fin_diagX1:
+		sub $t0, $t0, 120
+		ori $t2, $0, 0
+	diagonal_X2:
+		beq $t2, 30, Fin_diagX2
+			sub $t0, $t0, 1024
+			addi $t0, $t0, 4
+			sw $t1, 0($t0)
+			addi $t2, $t2, 1
+			j diagonal_X2
+		Fin_diagX2:
+		jr $ra
+
+# Funcion que diseña las X en el tablero
+interfaz_l:
+	# Carga el color y la direccion de bitmap			
+	li $t1, 0xFFFFFF	
+	li $t0, 0x10010000
+	# Verifica en que celda se va a dibujar a l segun $a2
+	beq $a2, 1, l_1
+	beq $a2, 2, l_2
+	beq $a2, 3, l_3
+	beq $a2, 4, l_4
+	beq $a2, 5, l_5
+	beq $a2, 6, l_6
+	beq $a2, 7, l_7
+	beq $a2, 8, l_8
+	beq $a2, 9, l_9
+
+	#Se dibuja la X en la celda correspondiente
+	l_1:
+		addi $t0, $t0, 168
+		li $t3, 60
+		li $t4, 1024
+		mult $t3, $t4
+		mflo $t5
+		add $t0, $t0, $t5
+		j linea_vertical
+
+	l_2:
+		addi $t0, $t0, 480
+		li $t3, 60
+		li $t4, 1024
+		mult $t3, $t4
+		mflo $t5
+		add $t0, $t0, $t5
+		j linea_vertical
+	
+	l_3:
+		addi $t0, $t0, 800
+		li $t3, 60
+		li $t4, 1024
+		mult $t3, $t4
+		mflo $t5
+		add $t0, $t0, $t5
+		j linea_vertical
+	
+	l_4:
+		addi $t0, $t0, 168
+		li $t3, 130
+		li $t4, 1024
+		mult $t3, $t4
+		mflo $t5
+		add $t0, $t0, $t5
+		j linea_vertical
+	
+	l_5:
+		addi $t0, $t0, 480
+		li $t3, 130
+		li $t4, 1024
+		mult $t3, $t4
+		mflo $t5
+		add $t0, $t0, $t5
+		j linea_vertical
+	
+	l_6:
+		addi $t0, $t0, 800	
+		li $t3, 130
+		li $t4, 1024
+		mult $t3, $t4
+		mflo $t5
+		add $t0, $t0, $t5
+		j linea_vertical
+	
+	l_7:
+		addi $t0, $t0, 168
+		li $t3, 200
+		li $t4, 1024
+		mult $t3, $t4
+		mflo $t5
+		add $t0, $t0, $t5
+		j linea_vertical
+	
+	l_8:
+		addi $t0, $t0, 480
+		li $t3, 200
+		li $t4, 1024
+		mult $t3, $t4
+		mflo $t5
+		add $t0, $t0, $t5
+		j linea_vertical
+	
+	l_9:
+		addi $t0, $t0, 800
+		li $t3, 200
+		li $t4, 1024
+		mult $t3, $t4
+		mflo $t5
+		add $t0, $t0, $t5
+		j linea_vertical
+	
+	# Escala de dibujo de las l en la interfaz		
+	linea_vertical:
+		beq $t2, 40, fin_linea
+		sw $t1, 0($t0)	
+		sub $t0, $t0, 1024
+		addi $t2, $t2, 1
+		j linea_vertical
+	fin_linea:
+		jr $ra
