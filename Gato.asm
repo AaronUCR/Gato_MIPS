@@ -6,10 +6,13 @@
 	jugadaInvalida: .asciiz "Jugada invalida, intente de nuevo...\n"
 	ganadorJugador1: .asciiz "Jugador 1 (X) ha ganado...\n"
 	ganadorJugador2: .asciiz "Jugador 2 (l) ha ganado...\n"
+	mensajeEmpate: .asciiz "Hubo un empate..."
+	mensajeGanador1: .asciiz "Jugador 1 ha ganado..."
+	mensajeGanador2: .asciiz "Jugador 2 ha ganado..."
 .text 
 Comienzo:
 	la $s0, tablero
-	li $s1, 1
+	li $s1, 0
 	li $v0, 4
 	la $a0, mensajeInicial
 	syscall
@@ -38,6 +41,15 @@ jugador_1:
 	jugada_validada1:
 	jal jugada_jugador1
 	
+	# Verifica si hubo empate
+	jal verificar_empate
+	beq $v0, 1, Fin
+	
+	# Verifica si el jugador 1 ha ganado
+	jal verificar_gane
+	beq $v0, 1, Fin
+	
+	
 # Llamada a las funciones correspondientes de jugador 2 (l)
 jugador_2:
 	# Mensaje para que el jugador 1 realice un movimiento
@@ -60,6 +72,16 @@ jugador_2:
 		j jugador_2
 	jugada_validada2:
 	jal jugada_jugador2
+	
+	# Verifica si hubo empate
+	jal verificar_empate
+	beq $v0, 1, Fin
+	# Verifica si el jugador 2 ha ganado
+	jal verificar_gane
+	beq $v0, 1, Fin
+	
+	j jugador_1
+	
 Fin:
 	li $v0, 10
 	syscall
@@ -203,4 +225,183 @@ jugada_valida:
 	li $v0, 1
 jr $ra
 
-# TO DO: Verificar empate y gane, dibujar en mips X y l
+#Situacion de empate
+verificar_empate:
+	li $t0 9
+	beq $s1, $t0, no_hubo_empate
+		li $v0, 0
+		jr $ra
+	no_hubo_empate:
+	li $v0, 4
+	la $a0, mensajeEmpate
+	syscall
+	li $v0, 1
+jr $ra
+
+# Se verifica si alguno de los jugadores ha ganado
+verificar_gane:
+    la $t0, tablero
+    #Si hubo un gane, se devuyelve 1
+    # Se verificar filas
+    fila_1:
+        lw $t1, 0($t0)
+        lw $t2, 4($t0)
+        lw $t3, 8($t0)
+        beq $t1, $0, fila_2
+        	bne $t1, $t2, fila_2
+        		bne $t1, $t3, fila_2
+        			bne $t1, 1, no_gana1
+        				li $v0, 4
+					la $a0, mensajeGanador1
+					syscall
+        				li $v0, 1
+        				jr $ra
+        			no_gana1:
+        			li $v0, 4
+				la $a0, mensajeGanador2
+				syscall
+        			li $v0, 1
+        			jr $ra
+    fila_2:
+        lw $t1, 12($t0)
+        lw $t2, 16($t0)
+        lw $t3, 20($t0)
+        beq $t1, $0, fila_3
+       		bne $t1, $t2, fila_3
+        		bne $t1, $t3, fila_3
+        			bne $t1, 1, no_gana2
+        				li $v0, 4
+					la $a0, mensajeGanador1
+					syscall
+        				li $v0, 1
+        				jr $ra
+        			no_gana2:
+        			li $v0, 4
+				la $a0, mensajeGanador2
+				syscall
+        			li $v0, 1
+        			jr $ra
+    fila_3:
+        lw $t1, 24($t0)
+        lw $t2, 28($t0)
+        lw $t3, 32($t0)
+        beq $t1, $0, columna_1
+        	bne $t1, $t2, columna_1
+        		bne $t1, $t3, columna_1
+        			bne $t1, 1, no_gana3
+        				li $v0, 4
+					la $a0, mensajeGanador1
+					syscall
+        				li $v0, 1
+        				jr $ra
+        			no_gana3:
+        			li $v0, 4
+				la $a0, mensajeGanador2
+				syscall
+        			li $v0, 1
+        			jr $ra
+    # Se verifican columnas
+    columna_1:
+        lw $t1, 0($t0)
+        lw $t2, 12($t0)
+        lw $t3, 24($t0)
+        beq $t1, $0, columna_2
+        	bne $t1, $t2, columna_2
+        		bne $t1, $t3, columna_2
+        			bne $t1, 1, no_gana4
+        				li $v0, 4
+					la $a0, mensajeGanador1
+					syscall
+        				li $v0, 1
+        				jr $ra
+        			no_gana4:
+        			li $v0, 4
+				la $a0, mensajeGanador2
+				syscall
+        			li $v0, 1
+        			jr $ra
+    columna_2:
+        lw $t1, 4($t0)
+        lw $t2, 16($t0)
+        lw $t3, 28($t0)
+        beq $t1, $0, columna_3
+        	bne $t1, $t2, columna_3
+        		bne $t1, $t3, columna_3
+        			bne $t1, 1, no_gana5
+        				li $v0, 4
+					la $a0, mensajeGanador1
+					syscall
+        				li $v0, 1
+        				jr $ra
+        			no_gana5:
+        			li $v0, 4
+				la $a0, mensajeGanador2
+				syscall
+        			li $v0, 1
+        			jr $ra
+    columna_3:
+        lw $t1, 8($t0)
+        lw $t2, 20($t0)
+        lw $t3, 32($t0)
+        beq $t1, $0, diagonal_1
+        	bne $t1, $t2, diagonal_1
+        		bne $t1, $t3, diagonal_1
+        			bne $t1, 1, no_gana6
+        				li $v0, 4
+					la $a0, mensajeGanador1
+					syscall
+        				li $v0, 1
+        				jr $ra
+        			no_gana6:
+        			li $v0, 4
+				la $a0, mensajeGanador2
+				syscall
+        			li $v0, 1
+        			jr $ra
+    # Se verifican diagonales
+    diagonal_1:
+        lw $t1, 0($t0)
+        lw $t2, 16($t0)
+        lw $t3, 32($t0)
+        beq $t1, $0, diagonal_2
+        	bne $t1, $t2, diagonal_2
+        		bne $t1, $t3, diagonal_2
+        			bne $t1, 1, no_gana7
+        				li $v0, 4
+					la $a0, mensajeGanador1
+					syscall
+        				li $v0, 1
+        				jr $ra
+        			no_gana7:
+        			li $v0, 4
+				la $a0, mensajeGanador2
+				syscall
+        			li $v0, 1
+        			jr $ra
+
+    diagonal_2:
+        lw $t1, 8($t0)
+        lw $t2, 16($t0)
+        lw $t3, 24($t0)
+        beq $t1, $0, no_ha_ganado
+        	bne $t1, $t2, no_ha_ganado
+        		bne $t1, $t3, no_ha_ganado
+        			bne $t1, 1, no_gana8
+        				li $v0, 4
+					la $a0, mensajeGanador1
+					syscall
+        				li $v0, 1
+        				jr $ra
+        			no_gana8:
+        			li $v0, 4
+				la $a0, mensajeGanador2
+				syscall
+        			li $v0, 1
+        			jr $ra
+    # Si no ha ganado devuelve 0
+    no_ha_ganado:
+        li $v0, 0
+        jr $ra
+        
+ #TO DO: Dibujar X y l en bitmap
+		
