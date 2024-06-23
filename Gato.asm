@@ -1,6 +1,27 @@
+#Instrucciones para ejecutar el programa:
+#Para ejecutar el programa hay que seguir los siguientes pasos, no sin antes saber como funciona.
+#Como anteriormente se dijo, el jugador 1 será identificado con la ficha 'X', mientras que el jugador 2 se indentificará con la ficha 'l'.
+#Las posiciones del tablero van de la siguiente forma:
+
+#_1_|_2_|_3_
+#_4_|_5_|_6_
+# 7 | 8 | 9
+
+ #Pasos para ejecutar un nuevo juego:
+ #1- Abra el archivo en el IDE MARS.
+ #2- Presione en "Run" y presione en "Assemble".
+ #3- Presione en tools y presione en "Bitmap Display".
+ #4- Setee el "Display Width in Pixels" a 256.
+ #5- Confirmar que el "Base adress for display" este en 0x10010000 (static data).
+ #6- Presionar el boton "Connect to MIPS" en el Bitmap Display.
+ #7- Presione en "Run" y presione en "Go".
+ #8- Luego de esto comenzara un nuevo juego, donde siempre va a empezar el jugador 1 por defecto.
+ #9- Cabe recalcar que todos los mensajes del juego y el ingreso de datos del mismo, se hacen desde la consola.
+ #10- Mantener el Bitmap Display abierto para ver el tablero y como se van colovando las fichas.
+
 .data
 	tablero: .word 0, 0, 0, 0, 0, 0, 0, 0, 0
-	mensajeInicial: .asciiz "Bienvenido al juego GATO, ganas haciendo una linea vertical, horizontal o diagonal.\n"
+	mensajeInicial: .asciiz "Bienvenido al juego GATO, ganas haciendo una linea vertical, horizontal o diagonal...\n"
 	mensajeJugador1: .asciiz "Turno del jugador 1 (X), realice el movimiento...\n"
 	mensajeJugador2: .asciiz "Turno del jugador 2 (l), realice el movimiento...\n"
 	jugadaInvalida: .asciiz "Jugada invalida, intente de nuevo...\n"
