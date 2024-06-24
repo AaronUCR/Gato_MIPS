@@ -4,6 +4,9 @@ Integrantes:
 Aarón Arce Alfaro C30601
 Javier Chacón Rosales C32052
 
+Link del repositorio en github:
+https://github.com/AaronUCR/Gato_MIPS.git
+
 Descripción del proyecto:
 El proyecto está basado en el juego GATO o tambiém llamado 3 en línea, en el cual consiste en un juego de dos jugadores, con un tablero de 3 filas y 3 columnas (9 celdas). El juego consiste en que alguno de los dos jugadores haga una línea de 3 fichas de forma vertical, horizontal o diagonal dentro del tablero, donde los jugadores se van turnando para colocar dichas fichas. Cabe recalcar que si el tablero se llena y ninguno de los dos jugadores ha hecho una línea de tres fichas, se considera un empate. Así mismo, el jugador 1 es representado con la ficha 'X', mientras que el jugador 2 se representa con la ficha 'O', pero por temas del proyecto y el dibujo de las fichas, el jugador 2 se representará con la ficha 'l'.
 
